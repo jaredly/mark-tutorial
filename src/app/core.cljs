@@ -27,6 +27,11 @@
   (q/background (:color state 100)))
 ")
 
+(def default-state
+  "
+{:color 0
+ :x 0}")
+
 (def funcs {:update identity
             :mouse-moved identity
             :setup #(-> {})
@@ -40,7 +45,7 @@
    (js/document.getElementById "state")
    #js {:lineNumbers true
         :matchBrackets true
-        :value "{:color 0 :x 0}"
+        :value default-state
         :autoCloseBrackets true
         :mode "clojure"}))
 
@@ -53,8 +58,13 @@
         :autoCloseBrackets true
         :mode "clojure"}))
 
+(def current-state (js/document.getElementById "current-state"))
+
 (js/Inlet setup-mirror)
 (js/Inlet code-mirror)
+
+(defn pprint-str [val]
+  (pprint/write val :stream nil))
 
 (def log-el (js/document.getElementById "log"))
 (def reload-button (js/document.getElementById "button"))
@@ -68,7 +78,7 @@
 (defn log [val]
   (let [el (js/document.createElement "div")
         val (if-not (str? val)
-              (pprint/write val :stream nil)
+              (pprint-str val)
               val)]
     (aset el "textContent" val)
     (.appendChild log-el el)))
@@ -86,12 +96,7 @@
        "  (:require [quil.core :as q]"
        "            [app.timers :as t]))"))
 
-(def header "
-(declare update-state)
-(declare draw)
-(declare mouse-moved)
-(declare key-pressed)
-")
+(def header "(declare update-state draw mouse-moved key-pressed)")
 
 (def footer "
 {:draw draw
@@ -100,29 +105,13 @@
  :key-pressed key-pressed
 }")
 
-(defn run-code []
-  (let [source (str (ns-str (swap! compnumber inc))
-                    header
-                    (.getValue code-mirror)
-                    footer)]
-    (jsc/eval-str
-     compiler-state
-     source
-     "evaled-source"
-     {:eval (fn [val cb]
-              #_(debug val)
-              (jsc/js-eval val cb))}
-     (fn [{new-funcs :value}]
-       (def funcs
-         (merge funcs new-funcs))))))
-
-(.on code-mirror "change" run-code)
-
 (defn wrap-fn [kwd arg]
-  (try ((kwd funcs) arg)
+  (let [func (kwd funcs)]
+    (when func
+      (try (func arg)
        (catch js/Error e
          (log-error e)
-         arg))) ; we just return the arg passed in (might be state)
+         arg))))) ; we just return the arg passed in (might be state)
 
 (defn make-app []
   (q/defsketch example
@@ -134,13 +123,50 @@
              (wrap-fn :setup))
     :mouse-moved (partial wrap-fn :mouse-moved)
     :key-pressed (partial wrap-fn :key-pressed)
-    :update (partial wrap-fn :update)
+    :update (fn [state]
+              (let [state (or (wrap-fn :update state) state)]
+                (aset current-state
+                      "textContent" (pprint-str state))
+                state))
     :middleware [m/fun-mode timers/middleware]))
+
+(defn eval [source file-name callback]
+  (jsc/eval-str
+   compiler-state
+   source
+   file-name
+   {:eval (fn [val cb]
+            (jsc/js-eval val cb))}
+   callback))
+
+(defn run-setup []
+  (let [next-num (swap! compnumber inc)
+        source (str (ns-str next-num))]
+    (eval source (str "eval-setup-" next-num ".cljs")
+          (fn [{setup-fn :value}]
+            (def funcs (assoc funcs :setup setup-fn))
+            (make-app)))))
+
+(defn run-code []
+  (let [next-num (swap! compnumber inc)
+        source (str (ns-str next-num)
+                    header
+                    (.getValue code-mirror)
+                    footer)]
+    (eval source (str "eval-code-" next-num ".cljs")
+          (fn [{new-funcs :value}]
+            (def funcs
+              (merge funcs new-funcs))))))
+
+(.on setup-mirror "change" run-setup)
+(.on code-mirror "change" run-code)
 
 (aset reload-button "onclick"
       (fn []
+        (run-setup)
+        (run-code)
         (make-app)
-        (run-code)))
+        ))
 
 (defn main []
   (debug "wat")

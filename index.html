@@ -1,0 +1,37 @@
+<!doctype html>
+<meta charset=utf8>
+<title>Marks Programming Environment</title>
+<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="vendor/inlet.css">
+<link rel="stylesheet" href="target/vendor/codemirror/codemirror.css">
+<body>
+  <div id="wrapper">
+    <div id="left">
+      <h1>Code Editor</h1>
+      <div class="text-container">
+        <div id="state-container">
+          <div id="state-left">
+            <div>Initial state</div>
+            <div id="state"></div>
+          </div>
+          <div id="state-right">
+            <div>Current state</div>
+            <div id="current-state"></div>
+          </div>
+        </div>
+        <div id="text"> </div>
+        </div>
+    </div>
+    <div id="right">
+      <h1>Live Game View</h1>
+      <canvas id="output"></canvas>
+      <button id="button">Reload</button>
+      <h4>Log Output</h4>
+      <button id="clear">Clear</button>
+      <div id="log">
+      </div>
+    </div>
+  </div>
+  <script src="vendor/inlet.js"></script>
+  <script src="target/main.js"></script>
+</body>

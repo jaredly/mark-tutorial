@@ -1,0 +1,2 @@
+;; Analyzed by ClojureScript 1.7.58
+{:name boot.cljs.main, :doc nil, :excludes #{}, :use-macros nil, :require-macros nil, :uses nil, :requires {app.core app.core, app.timers app.timers}, :imports nil}

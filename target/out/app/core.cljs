@@ -10,6 +10,10 @@
             [cljsjs.codemirror.mode.javascript]
             [cljsjs.codemirror.keymap.vim]
             [cljs.pprint :as pprint]
+            [replumb.core :as replumb]
+            #_[replumb.browser.io :as io]
+            [reagent.core :as r]
+            [app.view :as view]
             [quil.core :as q :include-macros true]
             [quil.middleware :as m]))
 
@@ -21,7 +25,10 @@
 (def convert clj->js)
 
 (def default-code
-  "
+  "(ns game.main
+  (:require [quil.core :as q]
+            [app.timers :as t]))
+
 (defn change-color [state]
   (assoc state :color (rand 255)))
 
@@ -45,16 +52,24 @@
   (when (= 0 (t/num-timers state))
     (t/add-timer state 500 change-color)))
 
+; each of these functions will get a state map, and return a new state map
 (def update-functions
   [update-color bounce])
 
+; the draw function receives the state map and uses quil's drawing functions
 (defn draw [{:keys [x y color]}]
   (q/background color)
   (q/rect x y 10 10))
+
+; you can also make mouse-moved and key-pressed functions which receive the state map and an event, and return a new state map
 ")
 
 (def default-state
-  "
+  "(ns game.state
+  (:require [quil.core :as q]
+            [app.timers :as t]))
+
+; the state @ the start of the animation
 {:color 0
  :x 0
  :y 0
@@ -124,29 +139,27 @@
 
 (def compiler-state (jsc/empty-state))
 (defonce compnumber (atom 0))
+(defonce repl-num (atom 0))
 
-(defn ns-str [id]
-  (str "(ns eval.main" id
-       "  (:require [quil.core :as q]"
-       "            [app.timers :as t]))"))
+(defn wrap-fn [kwd arg]
+  (let [func (kwd funcs)]
+    (if-not func
+      arg
+      (try (func arg)
+           (catch js/Error e
+             (log-error (str "Unable to execute " kwd " " e))
+             arg))))) ; we just return the arg passed in (might be state)
 
-(def header (str "(declare update-functions draw mouse-moved key-pressed)"
+(def header (str "(ns game.main)"
+             "(declare update-functions draw mouse-moved key-pressed)"
                  "(def WIDTH " WIDTH ")(def HEIGHT " HEIGHT ")"))
 
 (def footer "
 {:draw draw
  :update-functions update-functions
  :mouse-moved mouse-moved
- :key-pressed key-pressed
-}")
-
-(defn wrap-fn [kwd arg]
-  (let [func (kwd funcs)]
-    (when func
-      (try (func arg)
-       (catch js/Error e
-         (log-error (str "Unable to execute " kwd " " e))
-         arg))))) ; we just return the arg passed in (might be state)
+ :key-pressed key-pressed}
+")
 
 (declare sketch)
 
@@ -162,6 +175,7 @@
     :size [WIDTH HEIGHT]
     :draw (partial wrap-fn :draw)
     :setup (fn []
+             (q/frame-rate 30)
              (js/console.log "first thing or what" result)
              (def sketch (quil.sketch/current-applet))
              (let [result (or (wrap-fn :setup) {})]
@@ -170,15 +184,12 @@
     :mouse-moved (partial wrap-fn :mouse-moved)
     :key-pressed (partial wrap-fn :key-pressed)
     :update (fn [state]
-              (js/console.log "update" state)
               (let [functions (:update-functions funcs)
                     state (reduce #(or (try-wrap %2 %1) %1) state functions)]
                 (aset current-state
                       "textContent" (pprint-str state))
-                (js/console.log "updated" state functions)
                 state))
-    :middleware [m/fun-mode timers/middleware])
-  )
+    :middleware [m/fun-mode timers/middleware]))
 
 (defn reset-setup []
   (if sketch
@@ -190,13 +201,14 @@
    source
    file-name
    {:eval (fn [val cb]
+            (debug "evaling" (:source val))
             (jsc/js-eval val cb))}
    callback))
 
 (defn run-setup []
   (let [next-num (swap! compnumber inc)
-        source (str (ns-str next-num)
-                    (.getValue setup-mirror)
+        ; TODO lots of validation
+        source (str (.getValue setup-mirror)
                     )]
     (debug "setup" source)
     (eval source (str "eval-setup-" next-num ".cljs")
@@ -207,14 +219,37 @@
 
 (defn run-code []
   (let [next-num (swap! compnumber inc)
-        source (str (ns-str next-num)
-                    header
+        source (str header
                     (.getValue code-mirror)
                     footer)]
     (eval source (str "eval-code-" next-num ".cljs")
           (fn [{new-funcs :value}]
             (def funcs
               (merge funcs new-funcs))))))
+
+#_(defn run-repl [text cb]
+  (let [id @repl-num
+        _ (swap! repl-num inc)
+        source (str (ns-str "") "(def out-" id " (do " text ")) out-" id)]
+    (debug "eval" source)
+    (eval source (str "eval-repl-" next-num ".cljs")
+          (fn [{repl-result :value :as full}]
+            (debug full)
+            (cb repl-result id)))))
+
+(def replumb-opts
+  (merge (replumb/browser-options ["/src/app" "/target/out"]
+                                  (fn [& args] (debug "replumb load noop" args))#_io/fetch-file!)
+         {;:warning-as-error true
+                                        ;:verbose true
+          :no-pr-str-on-value true
+
+          }))
+
+(defn run-repl [text cb]
+  (replumb/read-eval-call replumb-opts
+                          #(cb (replumb/success? %) (replumb/unwrap-result %))
+                          text))
 
 (defn throttle [f time]
   (let [last (atom nil)]
@@ -227,7 +262,10 @@
   (do
     (.on setup-mirror "change" run-setup)
     (.on code-mirror "change" (throttle run-code 400))
+    (view/init)
     nil))
+(r/render [view/repl run-repl]
+          (js/document.getElementById "repl"))
 
 (aset reload-button "onclick"
       (fn []
@@ -237,7 +275,6 @@
         ))
 
 (defn main []
-  (debug "wat")
   (js/console.log "www"))
 
 (swap! jsc/*loaded* conj 'quil.core)
@@ -256,9 +293,14 @@
             (log (first args))
             (log args)))))
 
-(set-print!)
+(view/set-print!)
+
+(replumb/read-eval-call replumb-opts
+                        #(debug "Replumb ini" %)
+                        "(in-ns 'game.main)")
 (run-setup)
 (run-code)
+#_(swap! replumb.repl/app-env assoc :current-ns 'eval.main)
 (make-app)
 
-(js/setTimeout set-print! 100)
+(js/setTimeout view/set-print! 100)

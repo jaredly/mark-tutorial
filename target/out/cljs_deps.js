@@ -24,13 +24,16 @@ goog.addDependency("../re_frame/middleware.js", ['re_frame.middleware'], ['reage
 goog.addDependency("../re_frame/core.js", ['re_frame.core'], ['cljs.core', 're_frame.router', 're_frame.utils', 're_frame.handlers', 're_frame.subs', 're_frame.middleware']);
 goog.addDependency("../app/handlers.js", ['app.handlers'], ['reagent.core', 'cljs.core', 'app.views.helpers', 're_frame.core']);
 goog.addDependency("../app/subs.js", ['app.subs'], ['reagent.core', 'cljs.core', 'app.views.helpers', 're_frame.core']);
-goog.addDependency("../app/view.js", ['app.view'], ['reagent.core', 'cljs.core', 'app.handlers', 'app.subs', 'app.views.helpers', 're_frame.core']);
+goog.addDependency("../cljs/pprint.js", ['cljs.pprint'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'clojure.string']);
+goog.addDependency("../devtools/prefs.js", ['devtools.prefs'], ['cljs.core', 'clojure.string']);
+goog.addDependency("../devtools/format.js", ['devtools.format'], ['cljs.core', 'devtools.prefs']);
+goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
+goog.addDependency("../app/view.js", ['app.view'], ['reagent.core', 'cljs.core', 'cljs.pprint', 'app.handlers', 'app.subs', 'devtools.format', 'clojure.string', 'cljs.reader', 'app.views.helpers', 're_frame.core']);
 goog.addDependency("../cljs/tools/reader/impl/utils.js", ['cljs.tools.reader.impl.utils'], ['goog.string', 'cljs.core', 'clojure.string']);
 goog.addDependency("../cljs/tools/reader/reader_types.js", ['cljs.tools.reader.reader_types'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/tools/reader/impl/commons.js", ['cljs.tools.reader.impl.commons'], ['cljs.core', 'cljs.tools.reader.reader_types', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/tools/reader.js", ['cljs.tools.reader'], ['cljs.tools.reader.impl.commons', 'goog.string', 'cljs.core', 'cljs.tools.reader.reader_types', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils', 'clojure.string', 'goog.array']);
 goog.addDependency("../cljs/env.js", ['cljs.env'], ['cljs.core']);
-goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../cljs/tagged_literals.js", ['cljs.tagged_literals'], ['cljs.core', 'cljs.reader']);
 goog.addDependency("../cljs/analyzer.js", ['cljs.analyzer'], ['cljs.tools.reader', 'goog.string', 'cljs.core', 'cljs.tools.reader.reader_types', 'cljs.env', 'clojure.set', 'cljs.tagged_literals', 'clojure.string', 'cljs.reader']);
 goog.addDependency("../cljs/source_map/base64.js", ['cljs.source_map.base64'], ['cljs.core']);
@@ -42,7 +45,6 @@ goog.addDependency("../cljs/core$macros.js", ['cljs.core$macros'], ['cljs.compil
 goog.addDependency("../cljs/js.js", ['cljs.js'], ['cljs.compiler', 'cljs.tools.reader', 'cljs.core', 'goog.crypt.base64', 'cljs.tools.reader.reader_types', 'cljs.env', 'goog.string.StringBuffer', 'cljs.tagged_literals', 'cljs.analyzer', 'cljs.source_map', 'clojure.string', 'cljs.core$macros']);
 goog.addDependency("../replumb/common.js", ['replumb.common'], ['cljs.core', 'clojure.string']);
 goog.addDependency("../replumb/load.js", ['replumb.load'], ['cljs.js', 'cljs.core', 'clojure.string', 'replumb.common']);
-goog.addDependency("../cljs/pprint.js", ['cljs.pprint'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'clojure.string']);
 goog.addDependency("../replumb/doc_maps.js", ['replumb.doc_maps'], ['cljs.core']);
 goog.addDependency("../replumb/browser.js", ['replumb.browser'], ['cljs.core']);
 goog.addDependency("../cljs/repl.js", ['cljs.repl'], ['cljs.core']);
@@ -64,9 +66,7 @@ goog.addDependency("../clojure.inc.js", ['cljsjs.codemirror.mode.clojure'], ['cl
 goog.addDependency("../javascript.inc.js", ['cljsjs.codemirror.mode.javascript'], ['cljsjs.codemirror']);
 goog.addDependency("../matchbrackets.inc.js", ['cljsjs.codemirror.addon.edit.matchbrackets'], ['cljsjs.codemirror']);
 goog.addDependency("../cljs/stacktrace.js", ['cljs.stacktrace'], ['goog.string', 'cljs.core', 'clojure.string']);
-goog.addDependency("../devtools/prefs.js", ['devtools.prefs'], ['cljs.core', 'clojure.string']);
 goog.addDependency("../devtools/sanity_hints.js", ['devtools.sanity_hints'], ['cljs.stacktrace', 'cljs.core', 'clojure.string', 'devtools.prefs']);
-goog.addDependency("../devtools/format.js", ['devtools.format'], ['cljs.core', 'devtools.prefs']);
 goog.addDependency("../devtools/core.js", ['devtools.core'], ['devtools.sanity_hints', 'cljs.core', 'devtools.format', 'devtools.prefs']);
 goog.addDependency("../closebrackets.inc.js", ['cljsjs.codemirror.addon.edit.closebrackets'], ['cljsjs.codemirror']);
 goog.addDependency("../vim.inc.js", ['cljsjs.codemirror.keymap.vim'], ['cljsjs.codemirror']);

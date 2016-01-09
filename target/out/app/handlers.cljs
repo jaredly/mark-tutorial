@@ -6,11 +6,14 @@
                                    subscribe]]
             [reagent.core :as r]
 
-            [app.views.helpers :as helpers]
-            )
+            [app.views.helpers :as helpers])
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
+(register-handler
+ :clear-items
+ (fn [db _]
+   (assoc db :items [])))
 (register-handler
  :init
  (fn [db [_ data]]
@@ -32,10 +35,9 @@
        (update :items conj {:type :input :text input}))))
 (register-handler
  :add-result
- (fn [db [_ value]]
-   (update db :items conj {:type :output :value value})))
-
-
+ (fn [db [_ error? value]]
+   (update db :items conj {:type (if error? :error :output)
+                           :value value})))
 
 (register-handler
  :set-text

@@ -9,7 +9,7 @@ h1, h4 {
     text-shadow: 2px 1px 5px #888;
 }
 
-button {
+#button {
     padding: 10px 20px;
     font-size: 20px;
     margin: 5px 0;
@@ -45,6 +45,7 @@ button {
     align-items: stretch;
     justify-content: stretch;
     flex-direction: column;
+    min-height: 0;
 }
 
 #text {
@@ -118,4 +119,13 @@ button {
 #repl {
     flex: 1;
     display: flex;
+}
+
+#repl .CodeMirror {
+    height: auto;
+}
+
+.small-title {
+    color: white;
+    font-weight: bold;
 }

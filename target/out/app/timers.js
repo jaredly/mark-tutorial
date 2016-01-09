@@ -31,10 +31,10 @@ return state;
 }
 }
 });
-app.timers.check_ival = (function app$timers$check_ival(state,p__17434){
-var vec__17436 = p__17434;
-var name = cljs.core.nth.call(null,vec__17436,(0),null);
-var timer = cljs.core.nth.call(null,vec__17436,(1),null);
+app.timers.check_ival = (function app$timers$check_ival(state,p__17462){
+var vec__17464 = p__17462;
+var name = cljs.core.nth.call(null,vec__17464,(0),null);
+var timer = cljs.core.nth.call(null,vec__17464,(1),null);
 if(cljs.core.not.call(null,app.timers.timer_ready.call(null,timer))){
 return state;
 } else {
@@ -64,8 +64,8 @@ app.timers.update_fn = (function app$timers$update_fn(orig,state){
 return app.timers.update_ivals.call(null,app.timers.update_timers.call(null,orig.call(null,state)));
 });
 app.timers.middleware = (function app$timers$middleware(options){
-return cljs.core.assoc.call(null,options,new cljs.core.Keyword(null,"update","update",1045576396),(function (p1__17437_SHARP_){
-return app.timers.update_fn.call(null,new cljs.core.Keyword(null,"update","update",1045576396).cljs$core$IFn$_invoke$arity$1(options),p1__17437_SHARP_);
+return cljs.core.assoc.call(null,options,new cljs.core.Keyword(null,"update","update",1045576396),(function (p1__17465_SHARP_){
+return app.timers.update_fn.call(null,new cljs.core.Keyword(null,"update","update",1045576396).cljs$core$IFn$_invoke$arity$1(options),p1__17465_SHARP_);
 }));
 });
 

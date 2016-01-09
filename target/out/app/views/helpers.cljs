@@ -20,7 +20,6 @@
                    :border-radius 5})
 
 (defn get-styles [styles style-prop]
-  (js/console.log "get-stypes" style-prop)
   (cond
     (keyword? style-prop) (styles style-prop)
     (sequential? style-prop) (reduce (fn [a b] (merge a (get-styles styles b))) {} style-prop)

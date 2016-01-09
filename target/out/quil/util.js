@@ -31,8 +31,8 @@ throw (new Error([cljs.core.str("Expecting a keyword, got: "),cljs.core.str(key)
  * (length-of-longest-key {}) ;=> 0
  */
 quil.util.length_of_longest_key = (function quil$util$length_of_longest_key(m){
-var or__4247__auto__ = cljs.core.last.call(null,cljs.core.sort.call(null,cljs.core.map.call(null,(function (p1__12029_SHARP_){
-return p1__12029_SHARP_.length();
+var or__4247__auto__ = cljs.core.last.call(null,cljs.core.sort.call(null,cljs.core.map.call(null,(function (p1__12043_SHARP_){
+return p1__12043_SHARP_.length();
 }),cljs.core.keys.call(null,m))));
 if(cljs.core.truth_(or__4247__auto__)){
 return or__4247__auto__;
@@ -47,23 +47,23 @@ return (0);
  * empty string and also without pad in which case it defaults to a single space
  */
 quil.util.gen_padding = (function quil$util$gen_padding(){
-var args12030 = [];
-var len__5286__auto___12033 = arguments.length;
-var i__5287__auto___12034 = (0);
+var args12044 = [];
+var len__5286__auto___12047 = arguments.length;
+var i__5287__auto___12048 = (0);
 while(true){
-if((i__5287__auto___12034 < len__5286__auto___12033)){
-args12030.push((arguments[i__5287__auto___12034]));
+if((i__5287__auto___12048 < len__5286__auto___12047)){
+args12044.push((arguments[i__5287__auto___12048]));
 
-var G__12035 = (i__5287__auto___12034 + (1));
-i__5287__auto___12034 = G__12035;
+var G__12049 = (i__5287__auto___12048 + (1));
+i__5287__auto___12048 = G__12049;
 continue;
 } else {
 }
 break;
 }
 
-var G__12032 = args12030.length;
-switch (G__12032) {
+var G__12046 = args12044.length;
+switch (G__12046) {
 case 1:
 return quil.util.gen_padding.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -77,7 +77,7 @@ return quil.util.gen_padding.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arg
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args12030.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args12044.length)].join('')));
 
 }
 });
@@ -102,10 +102,10 @@ quil.util.gen_padding.cljs$lang$maxFixedArity = 3;
 quil.util.print_definition_list = (function quil$util$print_definition_list(definitions){
 var longest_key = quil.util.length_of_longest_key.call(null,definitions);
 return cljs.core.dorun.call(null,cljs.core.map.call(null,((function (longest_key){
-return (function (p__12039){
-var vec__12040 = p__12039;
-var k = cljs.core.nth.call(null,vec__12040,(0),null);
-var v = cljs.core.nth.call(null,vec__12040,(1),null);
+return (function (p__12053){
+var vec__12054 = p__12053;
+var k = cljs.core.nth.call(null,vec__12054,(0),null);
+var v = cljs.core.nth.call(null,vec__12054,(1),null);
 var len = k.length();
 var diff = (longest_key - len);
 var pad = quil.util.gen_padding.call(null,diff);

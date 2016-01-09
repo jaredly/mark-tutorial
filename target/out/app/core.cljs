@@ -95,13 +95,16 @@
         :mode "clojure"}))
 
 (defonce code-mirror
-  (js/CodeMirror.
-   (js/document.getElementById "text")
-   #js {:lineNumbers true
-        :matchBrackets true
-        :value default-code
-        :autoCloseBrackets true
-        :mode "clojure"}))
+  (let [container (js/document.getElementById "text")]
+    ; TODO make this resize w/ window
+    (set! (.-style.height container) (str (.-offsetHeight container) "px"))
+    (js/CodeMirror.
+     container
+     #js {:lineNumbers true
+          :matchBrackets true
+          :value default-code
+          :autoCloseBrackets true
+          :mode "clojure"})))
 
 (def current-state (js/document.getElementById "current-state"))
 
@@ -111,22 +114,10 @@
 (defn pprint-str [val]
   (pprint/write val :stream nil))
 
-(def log-el (js/document.getElementById "log"))
 (def reload-button (js/document.getElementById "button"))
-(.addEventListener
- (js/document.getElementById "clear")
- "click" (fn [] (aset log-el "innerHTML" "")))
 
 (defn str? [val]
   (= js/String (type val)))
-
-(defn log [val]
-  (let [el (js/document.createElement "div")
-        val (if-not (str? val)
-              (pprint-str val)
-              val)]
-    (aset el "textContent" val)
-    (.appendChild log-el el)))
 
 (defn debug [& val]
   (let [val (if (= 1 (count val))
@@ -134,10 +125,7 @@
               val)]
     (js/console.log val)))
 
-(defn log-error [err]
-  (log err))
-
-(def compiler-state (jsc/empty-state))
+#_(def compiler-state (jsc/empty-state))
 (defonce compnumber (atom 0))
 (defonce repl-num (atom 0))
 
@@ -175,7 +163,7 @@
     :size [WIDTH HEIGHT]
     :draw (partial wrap-fn :draw)
     :setup (fn []
-             (q/frame-rate 30)
+             (q/frame-rate 10)
              (js/console.log "first thing or what" result)
              (def sketch (quil.sketch/current-applet))
              (let [result (or (wrap-fn :setup) {})]
@@ -197,7 +185,7 @@
 
 (defn eval [source file-name callback]
   (jsc/eval-str
-   compiler-state
+   replumb.repl/st
    source
    file-name
    {:eval (fn [val cb]
@@ -227,20 +215,10 @@
             (def funcs
               (merge funcs new-funcs))))))
 
-#_(defn run-repl [text cb]
-  (let [id @repl-num
-        _ (swap! repl-num inc)
-        source (str (ns-str "") "(def out-" id " (do " text ")) out-" id)]
-    (debug "eval" source)
-    (eval source (str "eval-repl-" next-num ".cljs")
-          (fn [{repl-result :value :as full}]
-            (debug full)
-            (cb repl-result id)))))
-
 (def replumb-opts
   (merge (replumb/browser-options ["/src/app" "/target/out"]
                                   (fn [& args] (debug "replumb load noop" args))#_io/fetch-file!)
-         {;:warning-as-error true
+         {:warning-as-error true
                                         ;:verbose true
           :no-pr-str-on-value true
 
@@ -248,7 +226,9 @@
 
 (defn run-repl [text cb]
   (replumb/read-eval-call replumb-opts
-                          #(cb (replumb/success? %) (replumb/unwrap-result %))
+                          #(cb
+                            (replumb/success? %)
+                            (replumb/unwrap-result %))
                           text))
 
 (defn throttle [f time]
@@ -264,6 +244,7 @@
     (.on code-mirror "change" (throttle run-code 400))
     (view/init)
     nil))
+
 (r/render [view/repl run-repl]
           (js/document.getElementById "repl"))
 
@@ -295,12 +276,13 @@
 
 (view/set-print!)
 
-(replumb/read-eval-call replumb-opts
-                        #(debug "Replumb ini" %)
-                        "(in-ns 'game.main)")
+(replumb/read-eval-call
+ replumb-opts
+ #(debug "Replumb ini" %)
+ "(in-ns 'game.main)")
+
 (run-setup)
 (run-code)
-#_(swap! replumb.repl/app-env assoc :current-ns 'eval.main)
 (make-app)
 
 (js/setTimeout view/set-print! 100)

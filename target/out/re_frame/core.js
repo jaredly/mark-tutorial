@@ -23,23 +23,23 @@ re_frame.core.log_ex = re_frame.middleware.log_ex;
 re_frame.core.on_changes = re_frame.middleware.on_changes;
 re_frame.core.set_loggers_BANG_ = re_frame.utils.set_loggers_BANG_;
 re_frame.core.register_handler = (function re_frame$core$register_handler(){
-var args17254 = [];
-var len__5286__auto___17257 = arguments.length;
-var i__5287__auto___17258 = (0);
+var args17282 = [];
+var len__5286__auto___17285 = arguments.length;
+var i__5287__auto___17286 = (0);
 while(true){
-if((i__5287__auto___17258 < len__5286__auto___17257)){
-args17254.push((arguments[i__5287__auto___17258]));
+if((i__5287__auto___17286 < len__5286__auto___17285)){
+args17282.push((arguments[i__5287__auto___17286]));
 
-var G__17259 = (i__5287__auto___17258 + (1));
-i__5287__auto___17258 = G__17259;
+var G__17287 = (i__5287__auto___17286 + (1));
+i__5287__auto___17286 = G__17287;
 continue;
 } else {
 }
 break;
 }
 
-var G__17256 = args17254.length;
-switch (G__17256) {
+var G__17284 = args17282.length;
+switch (G__17284) {
 case 2:
 return re_frame.core.register_handler.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
 
@@ -49,7 +49,7 @@ return re_frame.core.register_handler.cljs$core$IFn$_invoke$arity$3((arguments[(
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args17254.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args17282.length)].join('')));
 
 }
 });

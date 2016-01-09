@@ -21,23 +21,23 @@ return cljs.core.tree_seq.call(null,replumb.common.error_branch_QMARK_,replumb.c
  * ** Be sure to pass a js/Error object here **
  */
 replumb.common.extract_message = (function replumb$common$extract_message(){
-var args13242 = [];
-var len__5286__auto___13246 = arguments.length;
-var i__5287__auto___13247 = (0);
+var args13256 = [];
+var len__5286__auto___13260 = arguments.length;
+var i__5287__auto___13261 = (0);
 while(true){
-if((i__5287__auto___13247 < len__5286__auto___13246)){
-args13242.push((arguments[i__5287__auto___13247]));
+if((i__5287__auto___13261 < len__5286__auto___13260)){
+args13256.push((arguments[i__5287__auto___13261]));
 
-var G__13248 = (i__5287__auto___13247 + (1));
-i__5287__auto___13247 = G__13248;
+var G__13262 = (i__5287__auto___13261 + (1));
+i__5287__auto___13261 = G__13262;
 continue;
 } else {
 }
 break;
 }
 
-var G__13244 = args13242.length;
-switch (G__13244) {
+var G__13258 = args13256.length;
+switch (G__13258) {
 case 1:
 return replumb.common.extract_message.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -51,7 +51,7 @@ return replumb.common.extract_message.cljs$core$IFn$_invoke$arity$3((arguments[(
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args13242.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args13256.length)].join('')));
 
 }
 });
@@ -65,21 +65,21 @@ return replumb.common.extract_message.call(null,err,exclude_error_msg_QMARK_,fal
 });
 
 replumb.common.extract_message.cljs$core$IFn$_invoke$arity$3 = (function (err,exclude_error_msg_QMARK_,print_stack_QMARK_){
-return [cljs.core.str((function (){var strings = (function (){var G__13245 = cljs.core.keep.call(null,cljs.core.identity,replumb.common.error_seq.call(null,err));
-var G__13245__$1 = (cljs.core.truth_(exclude_error_msg_QMARK_)?cljs.core.filter.call(null,((function (G__13245){
-return (function (p1__13240_SHARP_){
-return cljs.core.not_EQ_.call(null,"ERROR",p1__13240_SHARP_.message);
-});})(G__13245))
-,G__13245):G__13245);
-var G__13245__$2 = cljs.core.map.call(null,((function (G__13245,G__13245__$1){
-return (function (p1__13241_SHARP_){
-return p1__13241_SHARP_.message;
-});})(G__13245,G__13245__$1))
-,G__13245__$1)
+return [cljs.core.str((function (){var strings = (function (){var G__13259 = cljs.core.keep.call(null,cljs.core.identity,replumb.common.error_seq.call(null,err));
+var G__13259__$1 = (cljs.core.truth_(exclude_error_msg_QMARK_)?cljs.core.filter.call(null,((function (G__13259){
+return (function (p1__13254_SHARP_){
+return cljs.core.not_EQ_.call(null,"ERROR",p1__13254_SHARP_.message);
+});})(G__13259))
+,G__13259):G__13259);
+var G__13259__$2 = cljs.core.map.call(null,((function (G__13259,G__13259__$1){
+return (function (p1__13255_SHARP_){
+return p1__13255_SHARP_.message;
+});})(G__13259,G__13259__$1))
+,G__13259__$1)
 ;
-var G__13245__$3 = cljs.core.filter.call(null,cljs.core.complement.call(null,cljs.core.empty_QMARK_),G__13245__$2)
+var G__13259__$3 = cljs.core.filter.call(null,cljs.core.complement.call(null,cljs.core.empty_QMARK_),G__13259__$2)
 ;
-return G__13245__$3;
+return G__13259__$3;
 })();
 if(cljs.core.seq.call(null,strings)){
 return clojure.string.join.call(null," - ",strings);
@@ -136,9 +136,9 @@ replumb.common.valid_eval_warning_QMARK_ = (function replumb$common$valid_eval_w
 return typeof warning === 'string';
 });
 replumb.common.has_valid_warning_QMARK_ = (function replumb$common$has_valid_warning_QMARK_(result){
-var G__13251 = new cljs.core.Keyword(null,"warning","warning",-1685650671).cljs$core$IFn$_invoke$arity$1(result);
-var G__13251__$1 = (((G__13251 == null))?null:replumb.common.valid_eval_warning_QMARK_.call(null,G__13251));
-return G__13251__$1;
+var G__13265 = new cljs.core.Keyword(null,"warning","warning",-1685650671).cljs$core$IFn$_invoke$arity$1(result);
+var G__13265__$1 = (((G__13265 == null))?null:replumb.common.valid_eval_warning_QMARK_.call(null,G__13265));
+return G__13265__$1;
 });
 /**
  * Yields a "keyword not supported" error map. Receives the
@@ -163,23 +163,23 @@ if(cljs.core.map_QMARK_.call(null,opts)){
 throw (new Error([cljs.core.str("Assert failed: "),cljs.core.str(cljs.core.pr_str.call(null,cljs.core.list(new cljs.core.Symbol(null,"map?","map?",-1780568534,null),new cljs.core.Symbol(null,"opts","opts",1795607228,null))))].join('')));
 }
 
-var new_fn_entries = cljs.core.map.call(null,(function (p1__13252_SHARP_){
-return cljs.core.assoc.call(null,p1__13252_SHARP_,(1),"<hidden function>");
-}),cljs.core.filter.call(null,(function (p1__13253_SHARP_){
-return cljs.core.re_find.call(null,/-fn/,cljs.core.name.call(null,cljs.core.first.call(null,p1__13253_SHARP_)));
+var new_fn_entries = cljs.core.map.call(null,(function (p1__13266_SHARP_){
+return cljs.core.assoc.call(null,p1__13266_SHARP_,(1),"<hidden function>");
+}),cljs.core.filter.call(null,(function (p1__13267_SHARP_){
+return cljs.core.re_find.call(null,/-fn/,cljs.core.name.call(null,cljs.core.first.call(null,p1__13267_SHARP_)));
 }),cljs.core.into.call(null,cljs.core.PersistentVector.EMPTY,opts)));
 return cljs.core.into.call(null,opts,new_fn_entries);
 });
 replumb.common.debug_prn = (function replumb$common$debug_prn(){
 var args__5293__auto__ = [];
-var len__5286__auto___13256 = arguments.length;
-var i__5287__auto___13257 = (0);
+var len__5286__auto___13270 = arguments.length;
+var i__5287__auto___13271 = (0);
 while(true){
-if((i__5287__auto___13257 < len__5286__auto___13256)){
-args__5293__auto__.push((arguments[i__5287__auto___13257]));
+if((i__5287__auto___13271 < len__5286__auto___13270)){
+args__5293__auto__.push((arguments[i__5287__auto___13271]));
 
-var G__13258 = (i__5287__auto___13257 + (1));
-i__5287__auto___13257 = G__13258;
+var G__13272 = (i__5287__auto___13271 + (1));
+i__5287__auto___13271 = G__13272;
 continue;
 } else {
 }
@@ -191,17 +191,17 @@ return replumb.common.debug_prn.cljs$core$IFn$_invoke$arity$variadic(argseq__529
 });
 
 replumb.common.debug_prn.cljs$core$IFn$_invoke$arity$variadic = (function (args){
-var _STAR_print_fn_STAR_13255 = cljs.core._STAR_print_fn_STAR_;
+var _STAR_print_fn_STAR_13269 = cljs.core._STAR_print_fn_STAR_;
 cljs.core._STAR_print_fn_STAR_ = cljs.core._STAR_print_err_fn_STAR_;
 
 try{return cljs.core.apply.call(null,cljs.core.println,args);
-}finally {cljs.core._STAR_print_fn_STAR_ = _STAR_print_fn_STAR_13255;
+}finally {cljs.core._STAR_print_fn_STAR_ = _STAR_print_fn_STAR_13269;
 }});
 
 replumb.common.debug_prn.cljs$lang$maxFixedArity = (0);
 
-replumb.common.debug_prn.cljs$lang$applyTo = (function (seq13254){
-return replumb.common.debug_prn.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq13254));
+replumb.common.debug_prn.cljs$lang$applyTo = (function (seq13268){
+return replumb.common.debug_prn.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq13268));
 });
 /**
  * Adds a / if missing at the end of the path.
